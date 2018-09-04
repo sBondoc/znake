@@ -1,4 +1,4 @@
-# euler_84
+# znake
 
 A version of the classic "snake"-style game for TI-84 written in TI-BASIC. For when you're done with the test early and don't have access to your phone.
 
