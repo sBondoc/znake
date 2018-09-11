@@ -1,0 +1,141 @@
+Lbl 0
+
+ClrHome
+ClrDraw
+
+Func 
+1->Xmin
+1->Ymin
+95->Xmax
+63->Ymax
+AxesOff
+FnOff 
+
+Line(1,1,95,1
+Line(95,1,95,63
+Line(95,63,1,63
+Line(1,63,1,1
+Line(1,9,95,9
+Line(48,1,48,9
+Text(55,2,"SCORE:"
+Text(55,49,"HIGH:"
+
+{2,4->dim([A]
+48->[A](1,1)
+28->[A](2,1)
+0->S
+48->Tmin
+28->Tmax
+1->Tstep
+Repeat not(pxl-Test(55-B,A)
+	4randInt(1,23->A
+	4randInt(1,13->B
+End
+Pt-On(Tmin,Tmax+8,2
+Pt-On(A,B+8,3
+Text(55,25,S
+Text(55,68,H
+Repeat PV=25 or PV=26 or PV=34 or PV=24
+	getKey->PV
+End
+If PV=25
+1->|N
+If PV=26
+2->|N
+If PV=34
+3->|N
+If PV=24
+4->|N
+
+For(n,1,2)
+
+	getKey->PV
+	If PV=25 and |N!=3
+	1->|N
+	If PV=26 and |N!=4
+	2->|N
+	If PV=34 and |N!=1
+	3->|N
+	If PV=24 and |N!=2
+	4->|N
+	Tmax+4(|N=1)-4(|N=3)->Tmax
+	Tmin+4(|N=2)-4(|N=4)->Tmin
+
+	If 1<=Tmin and Tmin<=92 and 1<=Tmax and Tmax<=52
+	Then
+		If not(pxl-Test(55-Tmax,Tmin)
+		Then
+			Pt-Off(([A](1,Tstep)),([A](2,Tstep))+8,2
+			Pt-On(Tmin,Tmax+8,2
+			Tmin->[A](1,Tstep)
+			Tmax->[A](2,Tstep)
+			Tstep+1->Tstep
+			If Ans>S+4
+			1->Tstep
+		Else
+			If Tmin=A and Tmax=B
+			Then
+				Pt-Off(([A](1,Tstep)),([A](2,Tstep))+8,2
+				Pt-Off(A,B+8
+				Pt-On(Tmin,Tmax+8,2
+		    	Tmin->[A](1,Tstep)
+				Tmax->[A](2,Tstep)
+				Repeat not(pxl-Test(55-B,A)
+					4randInt(1,23->A
+					4randInt(1,13->B
+				End
+				Pt-On(A,B+8,3
+				S+4->S
+				Text(55,25,S
+				If S>H
+				Text(55,68,S
+				{0,4}+dim([A]->dim([A]
+		    	Tstep+1->Tstep
+		    	If Ans>S+4
+				1->Tstep
+			Else
+				n+2->n
+			End
+		End
+	Else
+		n+2->n
+	End
+n-1->n
+End
+
+If S>=1192
+Then
+	Text(10,35,"VICTORY!"
+Else
+	Text(10,30," GAME OVER!"
+End
+Text(18,38,"SCORE:"
+If S=0
+Then
+	Text(24,46,S
+Else
+	Text(24,45-2int(log(S))," ",S
+End
+If S<=H
+Then
+	Repeat PV=105
+		rand(60)
+		getKey->PV
+	End
+Else
+	S->H
+	Repeat PV=105
+		getKey->PV
+		rand(20)
+		Text(32,22," NEW HIGH SCORE!"
+		rand(40)
+		Text(32,22,"                                                    "
+	End
+End
+Menu("PLAY AGAIN?","SURE",0,"NAH",1
+
+
+Lbl 1
+
+ClrDraw
+ClrHome
